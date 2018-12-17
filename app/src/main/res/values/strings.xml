@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Automatic Coach</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="speed_label_text">Overall speed</string>
+    <string name="button_start_text">Start</string>
+    <string name="button_stop_text">Stop</string>
+    <string name="timeout_label_val">Commands Period</string>
+</resources>
