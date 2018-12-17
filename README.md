@@ -1,5 +1,5 @@
 # TK-autoCoach
-Automatic coaching program for "TK Mephi" personal technics norm.
+Automatic coaching program for "TK Mephi" personal technics norm for Android OS.
 
 ! There are many bugs and possible UI improvements, so, feedback is appreciated.
 
