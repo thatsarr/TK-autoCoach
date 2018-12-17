@@ -7,12 +7,12 @@ Automatic coaching program for "TK Mephi" personal technics norm.
 Repo contains src and following files for android program "AutomaticCoach". Program is designed to help in personal technics norm training.
 ### System requiments
 - Android >= 4.0.3
- (Program is developed using Google API )
+ (Program is developed using Google API 15)
 ### Options and possibilities
 Program plays theme music with commands overlay
-- commands dictation intervals are adjustible between 0.5 sec and 2 sec
+- commands dictation intervals are adjustable between 0.5 sec and 2 sec
 - play/stop feauture for dictation and theme music
-- theme music volume is adjustible
+- theme music volume is adjustable
 
 ## Support and features request
 If you want to request any features or report a bug please go to https://github.com/thatsarr/TK-autoCoach/issues and put an issue (preferable) or send message to developer in vk (if you hate github)
