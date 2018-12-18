@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 update_theme_volume_label();
-                Log.i("theme volume", "changed: " + Float.toString(get_theme_volume_coeff()));
+                Log.i("theme volume", "changed: " +
+                        Float.toString(Math.round(get_theme_volume_coeff())));
                 if (player != null)
                     player.set_theme_volume(get_theme_volume_coeff());
             }
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             PlayerService.LocalBinder binder = (PlayerService.LocalBinder) service;
             player = binder.getService();
+            if (player != null)
+                player.set_theme_volume(get_theme_volume_coeff());
             serviceBound = true;
 
             Toast.makeText(MainActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
