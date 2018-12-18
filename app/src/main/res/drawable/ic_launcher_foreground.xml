@@ -2,11 +2,11 @@
         xmlns:aapt="http://schemas.android.com/aapt"
         android:width="108dp"
         android:height="108dp"
-        android:viewportWidth="656.9343"
-        android:viewportHeight="656.9343"
+        android:viewportWidth="592.1053"
+        android:viewportHeight="592.1053"
         android:autoMirrored="true">
-    <group android:translateX="-121.532845"
-            android:translateY="-121.532845">
+    <group android:translateX="-153.94737"
+            android:translateY="-153.94737">
         <path android:fillColor="#FF000000" android:pathData="M596.965,53.768h58v186h-58z"/>
         <path android:fillColor="#FF000000" android:pathData="M-42.035,-109.232h305v379h-305z"/>
         <path android:fillColor="#ffffff" android:pathData="M-0,-2h900v900h-900z"/>

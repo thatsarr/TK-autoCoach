@@ -5,21 +5,14 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.Cursor;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private int min_cmds_period = 500; // in mseconds
@@ -48,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
         speed_bar  = (SeekBar) findViewById(R.id.speed_bar);
         volume_bar = (SeekBar) findViewById(R.id.theme_volume_bar);
         timeout_val = (TextView) findViewById(R.id.timeout_value);
-        volume_val = (TextView) findViewById(R.id.theme_volume_label);
         update_timeout_label();
-        update_theme_volume_label();
         speed_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -68,11 +59,10 @@ public class MainActivity extends AppCompatActivity {
         volume_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                update_theme_volume_label();
                 Log.i("theme volume", "changed: " +
-                        Float.toString(Math.round(get_theme_volume_coeff())));
+                        Float.toString(Math.round(get_theme_volume())));
                 if (player != null)
-                    player.set_theme_volume(get_theme_volume_coeff());
+                    player.set_theme_volume(get_theme_volume());
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
@@ -91,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
             PlayerService.LocalBinder binder = (PlayerService.LocalBinder) service;
             player = binder.getService();
             if (player != null)
-                player.set_theme_volume(get_theme_volume_coeff());
+                player.set_theme_volume(get_theme_volume());
             serviceBound = true;
 
-            Toast.makeText(MainActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -129,9 +119,9 @@ public class MainActivity extends AppCompatActivity {
         //Check is service is active
         if (!serviceBound) {
             Intent intent = new Intent(this, PlayerService.class);
-            Toast.makeText(MainActivity.this,
-                    "timeout set:"
-                            + Integer.toString(getPeriod()) + "ms", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this,
+//                    "timeout set:"
+//                            + Integer.toString(getPeriod()) + "ms", Toast.LENGTH_SHORT).show();
             intent.putExtra("timeout", getPeriod());
             startService(intent);
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -162,15 +152,13 @@ public class MainActivity extends AppCompatActivity {
                     + min_cmds_period )
         );
     }
-    protected float get_theme_volume_coeff(){
-        return ( ((float)volume_bar.getProgress())/volume_bar.getMax());
+    protected float get_theme_volume(){
+        return ( (float) (1 - (Math.log(volume_bar.getMax() - volume_bar.getProgress()) /
+                Math.log(volume_bar.getMax()))));
     }
 
     private void update_timeout_label(){
         timeout_val.setText(Double.toString(getPeriod()/1000.0) + " sec");
-    }
-    private void update_theme_volume_label(){
-        volume_val.setText(Integer.toString(Math.round(get_theme_volume_coeff()*100)) + "%");
     }
 
 }
