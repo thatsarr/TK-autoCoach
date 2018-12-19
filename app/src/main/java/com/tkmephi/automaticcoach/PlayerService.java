@@ -50,7 +50,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     private int cmds_timeout;
     private int cmds_number = 6;
-    private int cmd_duration = 1000; // in ms
+    static public int cmd_duration = 1000; // in ms
     private int[] cmds_array;
 //    private String theme_name = "theme.mp3";
 

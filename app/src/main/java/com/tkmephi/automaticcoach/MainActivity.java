@@ -15,7 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private int min_cmds_period = 500; // in mseconds
+    private int min_cmds_period = 0; // in mseconds
     private int max_cmds_period = 2000; // in mseconds
     public static final String Broadcast_PLAY =
             "com.tkmephi.automaticcoach.Play";
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+        speed_bar.setMax((max_cmds_period-min_cmds_period)/100);
     }
 
     //Binding this Client to the AudioPlayer Service
@@ -139,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
             sendBroadcast(broadcastIntent);
             playButton.setText(R.string.button_start_text);
         } else {
-//            player.playSound(1, 1.0f);
             playAudio();
             playButton.setText(R.string.button_stop_text);
         }
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void update_timeout_label(){
-        timeout_val.setText(Double.toString(getPeriod()/1000.0) + " sec");
+        timeout_val.setText(Double.toString((getPeriod() + PlayerService.cmd_duration)/1000.0  ) + " sec");
     }
 
 }
