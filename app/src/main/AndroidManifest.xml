@@ -28,7 +28,8 @@
         <service
             android:name=".PlayerService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"
+            android:permission=""></service>
     </application>
 
 </manifest>

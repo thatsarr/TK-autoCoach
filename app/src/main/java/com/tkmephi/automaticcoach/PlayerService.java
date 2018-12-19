@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -56,6 +57,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     @Override
     public void onCreate() {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        this creation might be an error on android 5 and 6
         soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
         timeout_handler = new Handler();
         runnable = new Runnable() {
@@ -332,6 +334,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 //            Log.i("Raw Asset: ", field.getName());
 //        }
     }
+
 
     public void commands_blend(){
         int index;
