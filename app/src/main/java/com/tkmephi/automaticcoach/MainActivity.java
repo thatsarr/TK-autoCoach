@@ -1,18 +1,24 @@
 package com.tkmephi.automaticcoach;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private int min_cmds_period = 0; // in mseconds
@@ -28,9 +34,14 @@ public class MainActivity extends AppCompatActivity {
     TextView volume_val;
     private PlayerService player = null;
     boolean serviceBound = false;
-//    Intent intent_playerService;
-
     boolean playback_started;
+
+    AlertDialog.Builder builder;
+
+    String about_message_gen(){
+        return ( "Version: " + getResources().getString(R.string.app_version) + "\n"
+                + getResources().getString(R.string.new_in_version));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +50,29 @@ public class MainActivity extends AppCompatActivity {
         playback_started = false;
         playButton = (Button) findViewById(R.id.button_start);
         speed_bar  = (SeekBar) findViewById(R.id.speed_bar);
+        speed_bar.setMax((max_cmds_period-min_cmds_period)/100);
+        speed_bar.setProgress(Math.round((max_cmds_period-min_cmds_period)/2 + min_cmds_period));
         volume_bar = (SeekBar) findViewById(R.id.theme_volume_bar);
         timeout_val = (TextView) findViewById(R.id.timeout_value);
         update_timeout_label();
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder .setTitle("Info")
+                .setMessage(about_message_gen())
+                .setNeutralButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }
+                );
+
         speed_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -71,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        speed_bar.setMax((max_cmds_period-min_cmds_period)/100);
     }
 
     //Binding this Client to the AudioPlayer Service
@@ -134,6 +164,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    protected int getPeriod (){
+        return ( Math.round(
+                ((max_cmds_period-min_cmds_period)/speed_bar.getMax() * (speed_bar.getMax()-speed_bar.getProgress()))
+                    + min_cmds_period )
+        );
+    }
+
+    protected float get_theme_volume(){
+        return ( (float) (1 - (Math.log(volume_bar.getMax() - volume_bar.getProgress()) /
+                Math.log(volume_bar.getMax()))));
+    }
+
+    private void update_timeout_label(){
+        timeout_val.setText(Double.toString((getPeriod() + PlayerService.cmd_duration)/1000.0  ) + " sec");
+    }
+
     public void start_clicked(View view) {
         if (playback_started) {
             Intent broadcastIntent =
@@ -147,19 +193,13 @@ public class MainActivity extends AppCompatActivity {
         playback_started = !playback_started;
     }
 
-    protected int getPeriod (){
-        return ( Math.round(
-                ((max_cmds_period-min_cmds_period)/speed_bar.getMax() * (speed_bar.getMax()-speed_bar.getProgress()))
-                    + min_cmds_period )
-        );
-    }
-    protected float get_theme_volume(){
-        return ( (float) (1 - (Math.log(volume_bar.getMax() - volume_bar.getProgress()) /
-                Math.log(volume_bar.getMax()))));
+    public void change_theme_music_dialog(View view) {
+        Toast.makeText(this, about_message_gen(), Toast.LENGTH_SHORT).show();
     }
 
-    private void update_timeout_label(){
-        timeout_val.setText(Double.toString((getPeriod() + PlayerService.cmd_duration)/1000.0  ) + " sec");
+    public void show_app_info(View view) {
+        Dialog dialog = builder.create();
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.show();
     }
-
 }

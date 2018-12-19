@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Auto Coach</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -7,4 +6,17 @@
     <string name="button_start_text">Start</string>
     <string name="button_stop_text">Stop</string>
     <string name="timeout_label_val">Commands Period</string>
+    <string name="button_info_label">info</string>
+    <string name="theme_volume_label">Theme Volume</string>
+    <string name="buton_theme_choose_label">Choose Theme Music</string>
+    <string name="info_dialog_title">About</string>
+    <string name="ok">Ok</string>
+    <string name="new_in_version">
+        New Features
+        \n- Custom theme music can be chosen
+        \n- Commands period now from 3 seconds to 1 with 0.1 step
+        \nFixes
+        \n- No commands playback on devices with Android &lt;= 6.0
+        \n- Other minor fixes
+    </string>
 </resources>

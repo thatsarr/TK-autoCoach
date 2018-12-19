@@ -1,20 +1,47 @@
 apply plugin: 'com.android.application'
 
+def APP_NAME = "Auto Coach"
+def versionMajor = 0
+def versionMinor = 2
+def versionPatch = 0
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
+def gitVersion_dev() {
+    def counter = 0
+    def process = "git rev-list master --first-parent --count".execute()
+    return process.text.toInteger()
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.tkmephi.automaticcoach"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode gitVersion_dev()
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        resValue "string", "app_name", APP_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            versionNameSuffix ".debug"
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}${versionNameSuffix}"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}"
+
         }
+    }
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "${variant.versionName}.apk"
     }
 }
 
