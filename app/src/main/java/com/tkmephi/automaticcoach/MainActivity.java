@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected int getPeriod (){
         return ( Math.round(
-                ((max_cmds_period-min_cmds_period)/speed_bar.getMax() * speed_bar.getProgress())
+                ((max_cmds_period-min_cmds_period)/speed_bar.getMax() * (speed_bar.getMax()-speed_bar.getProgress()))
                     + min_cmds_period )
         );
     }
