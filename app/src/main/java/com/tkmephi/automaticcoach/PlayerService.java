@@ -68,7 +68,6 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 Log.i("commands", "index: " + Integer.toString(cmd));
                 if (samples_loaded & soundPool_allowed) {
                     playSound(cmds_array[cmd], 1.0f);
-                    cur_stream = cmd;
                     ++cmd;
                     if (cmd == cmds_number) {
                         commands_blend();
@@ -247,6 +246,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void playMedia() {
+        Log.i("event", "playMedia()");
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
@@ -258,11 +258,14 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void stopMedia() {
+        Log.i("event", "stopMedia()");
         if (mediaPlayer == null) return;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
         }
         if (soundPool == null) return;
+        Log.i ("SoundPool", "attempt to stop " + Integer.toString(cur_stream) + " stream");
+        soundPool.stop(cur_stream);
         soundPool_allowed = false;
     }
 
@@ -285,15 +288,14 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         float streamVolumeCurrent = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float streamVolumeMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         float volume = streamVolumeCurrent*commands_volume_coeff / streamVolumeMax;
-        Log.i("soundPool", "curVolume" + Float.toString(volume));
-        soundPool.play(soundID, volume, volume, 1, 0, fSpeed);
+        Log.i("soundPool", "play stream " + Integer.toString(soundID));
+        cur_stream = soundPool.play(soundID, volume, volume, 1, 0, fSpeed);
     }
 
     private BroadcastReceiver playAudio = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             playMedia();
-            Log.i("media", "started");
         }
     };
 

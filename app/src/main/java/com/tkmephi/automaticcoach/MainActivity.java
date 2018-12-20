@@ -161,14 +161,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playAudio() {
+        Log.i("event", "MainActivity.playAudio()");
         //Check is service is active
         if (!serviceBound) {
+            Log.i("event", "MainActivity.playAudio() !serviceBound branch");
             Intent intent = new Intent(this, PlayerService.class);
             intent.putExtra("timeout", getPeriod());
             intent.putExtra("theme_uri", themeFile.toString());
             startService(intent);
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         } else {
+            Log.i("event", "MainActivity.playAudio() serviceBound aka else branch");
             Intent broadcastIntent =
                     new Intent(Broadcast_PLAY);
             sendBroadcast(broadcastIntent);
@@ -192,10 +195,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start_clicked(View view) {
-        Log.i ("Event", "Start/Stop clicked");
+        Log.i ("event", "start_clicked()");
         if (playback_started) {
             Intent broadcastIntent =
                     new Intent(Broadcast_STOP);
+            Log.i("event", "sendBroadcast(STOP)");
             sendBroadcast(broadcastIntent);
             playButton.setText(R.string.button_start_text);
         } else {
