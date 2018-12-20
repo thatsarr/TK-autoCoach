@@ -16,7 +16,9 @@
         android:layout_marginBottom="8dp"
         android:onClick="start_clicked"
         android:text="@string/button_start_text"
+        android:textAllCaps="true"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.Button"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,16 +116,32 @@
         android:id="@+id/button_info"
         style="@android:style/Widget.DeviceDefault.Light.Button.Small"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:onClick="show_app_info"
         android:text="@string/button_info_label"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_theme_choose"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_theme_choose" />
+
+    <Button
+        android:id="@+id/button_reset"
+        style="@android:style/Widget.DeviceDefault.Light.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:onClick="on_theme_reset_click"
+        android:text="@string/reset_button_label"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_theme_choose"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_theme_choose"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button_theme_choose"
@@ -134,10 +152,25 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:onClick="change_theme_music_dialog"
         android:text="@string/buton_theme_choose_label"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.Button"
+        app:layout_constraintBottom_toTopOf="@+id/theme_file_label"
+        app:layout_constraintEnd_toEndOf="@+id/button_info"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/theme_file_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/theme_file_default_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

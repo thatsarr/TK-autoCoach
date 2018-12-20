@@ -19,4 +19,6 @@
         \n- No commands playback on devices with Android &lt;= 6.0
         \n- Other minor fixes
     </string>
+    <string name="theme_file_default_label">Theme chosen: Popcorn.mp3</string>
+    <string name="reset_button_label">reset\ntheme</string>
 </resources>

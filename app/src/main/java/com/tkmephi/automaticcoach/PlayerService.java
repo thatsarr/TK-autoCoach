@@ -32,6 +32,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     //mediaplayer stuff
     private MediaPlayer mediaPlayer;
+    private boolean pause_on_next_prepared;
 
     // soundpool stuff
     private SoundPool soundPool;
@@ -52,10 +53,11 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     private int cmds_number = 6;
     static public int cmd_duration = 1000; // in ms
     private int[] cmds_array;
-//    private String theme_name = "theme.mp3";
+    private Uri theme_uri;
 
     @Override
     public void onCreate() {
+
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //        this creation might be an error on android 5 and 6
         soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
@@ -95,12 +97,12 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         cmds_timeout = intent.getIntExtra("timeout", 1500);
-
+        theme_uri = Uri.parse(intent.getStringExtra("theme_uri"));
         if (!requestAudioFocus()) {
             //Could not gain focus
             stopSelf();
         }
-        initMediaPlayer();
+        initMediaPlayer(theme_uri);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -111,7 +113,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         switch (focusState) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 // resume playback
-                if (mediaPlayer == null) initMediaPlayer();
+                if (mediaPlayer == null) initMediaPlayer(theme_uri);
                 else if (!mediaPlayer.isPlaying()) mediaPlayer.start();
                 mediaPlayer.setVolume(1.0f, 1.0f);
                 break;
@@ -172,7 +174,10 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     @Override
     public void onPrepared(MediaPlayer mp) {
         //Invoked when the media source is ready for playback.
-        playMedia();
+        if (!pause_on_next_prepared){
+            playMedia();
+        }
+        pause_on_next_prepared = false;
     }
 
     @Override
@@ -208,7 +213,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         removeAudioFocus();
     }
 
-    private void initMediaPlayer() {
+    private void initMediaPlayer(Uri audio) {
         mediaPlayer = new MediaPlayer();
         //Set up MediaPlayer event listeners
         mediaPlayer.setOnCompletionListener(this);
@@ -230,7 +235,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             // Set the data source to the mediaFile location
             mediaPlayer.setDataSource(
                     getApplicationContext(),
-                    Uri.parse("android.resource://com.tkmephi.automaticcoach/" + R.raw.theme)
+                    audio
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -361,5 +366,14 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         theme_volume_coeff = new_volume;
         Log.i("mediaplayer", "curVolume" + Float.toString(new_volume));
         mediaPlayer.setVolume(new_volume, new_volume);
+    }
+
+    public void change_theme(Uri new_theme){
+        theme_uri = new_theme;
+        if (mediaPlayer.isPlaying()) stopMedia();
+        mediaPlayer.release();
+//        mediaPlayer = null;
+        initMediaPlayer(theme_uri);
+        pause_on_next_prepared = true;
     }
 }
