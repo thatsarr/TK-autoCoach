@@ -231,7 +231,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void change_theme_music (Uri themeFile){
-        player.change_theme(themeFile);
+        if (serviceBound) {
+            player.change_theme(themeFile);
+        }
         theme_filename_label.setText(theme_filename_label_const.concat(getFileName(themeFile)));
         playButton.setText(R.string.button_start_text);
         playback_started = false;

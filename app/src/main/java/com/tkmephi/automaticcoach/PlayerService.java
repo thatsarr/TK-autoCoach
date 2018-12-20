@@ -114,8 +114,8 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             case AudioManager.AUDIOFOCUS_GAIN:
                 // resume playback
                 if (mediaPlayer == null) initMediaPlayer(theme_uri);
-                else if (!mediaPlayer.isPlaying()) mediaPlayer.start();
-                mediaPlayer.setVolume(1.0f, 1.0f);
+//                else if (!mediaPlayer.isPlaying()) mediaPlayer.start();
+//                mediaPlayer.setVolume(1.0f, 1.0f);
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 // Lost focus for an unbounded amount of time: stop playback and release media player
