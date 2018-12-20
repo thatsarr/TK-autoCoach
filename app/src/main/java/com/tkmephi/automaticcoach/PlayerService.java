@@ -211,6 +211,8 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             soundPool = null;
         }
         removeAudioFocus();
+        unregisterReceiver(playAudio);
+        unregisterReceiver(stopAudio);
     }
 
     private void initMediaPlayer(Uri audio) {
