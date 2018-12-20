@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -11,14 +11,18 @@
     <string name="buton_theme_choose_label">Choose Theme Music</string>
     <string name="info_dialog_title">About</string>
     <string name="ok">Ok</string>
-    <string name="new_in_version">
-        New Features
-        \n- Custom theme music can be chosen
-        \n- Commands period now from 3 seconds to 1 with 0.1 step
-        \nFixes
-        \n- No commands playback on devices with Android &lt;= 6.0
-        \n- Other minor fixes
-    </string>
+    <string name="new_in_version" tools:ignore="TypographyEllipsis"><![CDATA[
+        Solid 1.0 release!
+        \n
+        \nFeatures
+        \n- all of them are obvious, just look at UI
+        \n
+        \nFixed bugs: (ton of them)
+        \n- Important: No commands playback on devices with Android <=6.0
+        \n- ...
+        \n\nit is highly recommended to download fresh versions at
+        \nhttps://github.com/thatsarr/TK-autoCoach/releases
+    ]]></string>
     <string name="theme_file_default_label">Theme chosen: Popcorn.mp3</string>
     <string name="reset_button_label">reset\ntheme</string>
 </resources>

@@ -15,6 +15,9 @@ import android.os.IBinder;
 import android.provider.OpenableColumns;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -47,9 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
     AlertDialog.Builder builder;
 
-    String about_message_gen(){
-        return ( "Version: " + getResources().getString(R.string.app_version) + "\n"
-                + getResources().getString(R.string.new_in_version));
+    SpannableString about_message_gen(){
+        final SpannableString s = new SpannableString(
+                "Version: " + getResources().getString(R.string.app_version) + "\n"
+                        + getResources().getString(R.string.new_in_version)
+        );
+        Linkify.addLinks(s, Linkify.ALL);
+        return (s);
     }
 
     @Override
@@ -277,6 +284,9 @@ public class MainActivity extends AppCompatActivity {
         Dialog dialog = builder.create();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.show();
+        TextView about_text = (TextView)dialog.findViewById(android.R.id.message);
+        about_text.setMovementMethod(LinkMovementMethod.getInstance());
+        about_text.setTextSize(14);
     }
 
     public static Uri resourceToUri(Context context, int resID) {
