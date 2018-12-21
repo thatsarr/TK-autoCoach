@@ -26,7 +26,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private int min_cmds_period = 0; // in mseconds
@@ -120,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
 
     }
 
@@ -291,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
                 "Version: ".concat(getResources().getString(R.string.app_version)),
                 Toast.LENGTH_LONG
         ).show();
+        int i = 1/0;
     }
 
     public static Uri resourceToUri(Context context, int resID) {

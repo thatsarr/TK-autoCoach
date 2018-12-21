@@ -25,4 +25,5 @@
     ]]></string>
     <string name="theme_file_default_label">Theme chosen: Popcorn.mp3</string>
     <string name="reset_button_label">reset\ntheme</string>
+    <string name="crash_toast_text">Crash report sent to developer</string>
 </resources>
