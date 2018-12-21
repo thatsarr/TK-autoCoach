@@ -36,7 +36,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     // soundpool stuff
     private SoundPool soundPool;
-    boolean soundPool_allowed;
+//    boolean soundPool_allowed;
     int cur_stream;
     Context context = this;
     int samples_loaded_count;
@@ -60,13 +60,13 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //        this creation might be an error on android 5 and 6
-        soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 100);
         timeout_handler = new Handler();
         runnable = new Runnable() {
             int cmd = cmds_number-1;
             public void run() {
-                Log.i("commands", "index: " + Integer.toString(cmd));
-                if (samples_loaded & soundPool_allowed) {
+                Log.d("commands", "index: " + Integer.toString(cmd));
+                if (samples_loaded) {
                     playSound(cmds_array[cmd], 1.0f);
                     ++cmd;
                     if (cmd == cmds_number) {
@@ -111,24 +111,28 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         //Invoked when the audio focus of the system is updated.
         switch (focusState) {
             case AudioManager.AUDIOFOCUS_GAIN:
+                Log.d("Focus", "Audio focus GAIN");
                 // resume playback
                 if (mediaPlayer == null) initMediaPlayer(theme_uri);
 //                else if (!mediaPlayer.isPlaying()) mediaPlayer.start();
 //                mediaPlayer.setVolume(1.0f, 1.0f);
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
+                Log.d("Focus", "Audio focus LOSS");
                 // Lost focus for an unbounded amount of time: stop playback and release media player
                 if (mediaPlayer.isPlaying()) mediaPlayer.stop();
                 mediaPlayer.release();
                 mediaPlayer = null;
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                Log.d("Focus", "Audio focus LOSS TRANSIENT");
                 // Lost focus for a short time, but we have to stop
                 // playback. We don't release the media player because playback
                 // is likely to resume
                 if (mediaPlayer.isPlaying()) mediaPlayer.pause();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                Log.d("Focus", "Audio focus LOSS TRANSIENT CAN DUCK");
                 // Lost focus for a short time, but it's ok to keep playing
                 // at an attenuated level
                 if (mediaPlayer.isPlaying()) mediaPlayer.setVolume(0.1f, 0.1f);
@@ -172,6 +176,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        Log.d("event", "PlayerService.onPrepared()");
         //Invoked when the media source is ready for playback.
         if (!pause_on_next_prepared){
             playMedia();
@@ -198,6 +203,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onDestroy() {
+        Log.d("event", "PlayerService.onDestroy()");
         super.onDestroy();
         if (mediaPlayer != null) {
             stopMedia();
@@ -215,6 +221,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void initMediaPlayer(Uri audio) {
+        Log.d("event", "PlayerService.initMediaPlayer");
         mediaPlayer = new MediaPlayer();
         //Set up MediaPlayer event listeners
         mediaPlayer.setOnCompletionListener(this);
@@ -246,19 +253,18 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void playMedia() {
-        Log.i("event", "playMedia()");
+        Log.d("event", "PlayerService.playMedia()");
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
-            Log.d("event", "playMedia()");
+            Log.d("event", "PlayerService.playMedia() mediaPlayer not playing branch");
             play_random_commands();
-            soundPool_allowed = true;
 
         }
     }
 
     private void stopMedia() {
-        Log.i("event", "stopMedia()");
+        Log.d("event", "PlayerService.stopMedia()");
         if (mediaPlayer == null) return;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -266,10 +272,13 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         if (soundPool == null) return;
         Log.i ("SoundPool", "attempt to stop " + Integer.toString(cur_stream) + " stream");
         soundPool.stop(cur_stream);
-        soundPool_allowed = false;
+//        soundPool_allowed = false;
+        timeout_handler.removeCallbacksAndMessages(null);
     }
 
+
     private boolean requestAudioFocus() {
+
         int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             //Focus gained
@@ -288,8 +297,9 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         float streamVolumeCurrent = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float streamVolumeMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         float volume = streamVolumeCurrent*commands_volume_coeff / streamVolumeMax;
-        Log.i("soundPool", "play stream " + Integer.toString(soundID));
+        Log.i("event", "SoundPool: playing command  " + Integer.toString(soundID));
         cur_stream = soundPool.play(soundID, volume, volume, 1, 0, fSpeed);
+        Log.i("event", "SoundPool: playing stream " + Integer.toString(cur_stream));
     }
 
     private BroadcastReceiver playAudio = new BroadcastReceiver() {

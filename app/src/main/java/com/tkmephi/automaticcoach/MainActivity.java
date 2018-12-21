@@ -52,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     SpannableString about_message_gen(){
         final SpannableString s = new SpannableString(
-                "Version: " + getResources().getString(R.string.app_version) + "\n"
-                        + getResources().getString(R.string.new_in_version)
+                getResources().getString(R.string.new_in_version)
         );
         Linkify.addLinks(s, Linkify.ALL);
         return (s);
@@ -168,17 +167,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playAudio() {
-        Log.i("event", "MainActivity.playAudio()");
+        Log.d("event", "MainActivity.playAudio()");
         //Check is service is active
         if (!serviceBound) {
-            Log.i("event", "MainActivity.playAudio() !serviceBound branch");
+            Log.d("event", "MainActivity.playAudio() !serviceBound branch");
             Intent intent = new Intent(this, PlayerService.class);
             intent.putExtra("timeout", getPeriod());
             intent.putExtra("theme_uri", themeFile.toString());
             startService(intent);
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         } else {
-            Log.i("event", "MainActivity.playAudio() serviceBound aka else branch");
+            Log.d("event", "MainActivity.playAudio() serviceBound aka else branch");
             Intent broadcastIntent =
                     new Intent(Broadcast_PLAY);
             sendBroadcast(broadcastIntent);
@@ -202,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start_clicked(View view) {
-        Log.i ("event", "start_clicked()");
+        Log.d ("event", "start_clicked()");
         if (playback_started) {
             Intent broadcastIntent =
                     new Intent(Broadcast_STOP);
-            Log.i("event", "sendBroadcast(STOP)");
+            Log.d("event", "sendBroadcast(STOP)");
             sendBroadcast(broadcastIntent);
             playButton.setText(R.string.button_start_text);
         } else {
@@ -287,6 +286,11 @@ public class MainActivity extends AppCompatActivity {
         TextView about_text = (TextView)dialog.findViewById(android.R.id.message);
         about_text.setMovementMethod(LinkMovementMethod.getInstance());
         about_text.setTextSize(14);
+        Toast.makeText(
+                this,
+                "Version: ".concat(getResources().getString(R.string.app_version)),
+                Toast.LENGTH_LONG
+        ).show();
     }
 
     public static Uri resourceToUri(Context context, int resID) {
