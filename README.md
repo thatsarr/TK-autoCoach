@@ -16,8 +16,8 @@ Program plays theme music with commands overlay
 - custom theme music choice option
 
 ## Support and features request
-    If you want to request any features or report a bug, please go to [issues page](https://github.com/thatsarr/TK-autoCoach/issues) and put an issue (preferable) or send message to developer in vk (if you hate github).
-    Also from version 1.0.1 crash reporting by email feature is implemented (suggestion window automaticaly shows on app crash).
+If you want to request any features or report a bug, please go to [issues page](https://github.com/thatsarr/TK-autoCoach/issues) and put an issue (preferable) or send message to developer in vk (if you hate github).
+Also from version 1.0.1 crash reporting by email feature is implemented (suggestion window automaticaly shows on app crash).
 ### Information to provide in bug issue
 - device model
 - android version
