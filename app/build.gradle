@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 def APP_NAME = "AutoCoach"
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 2
+def versionPatch = 3
 def acraVersion = 'ch.acra:acra:4.6.2'
 
 def gitVersion_dev() {

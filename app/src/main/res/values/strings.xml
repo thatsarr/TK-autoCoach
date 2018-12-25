@@ -15,7 +15,8 @@
         Solid 1.0 release!
         \n
         \nFeatures
-        \n- all of them are obvious, just look at UI
+        \n- most of them are obvious, just look at UI
+        \n- crash report may be sent to devs via e-mail
         \n
         \nFixed bugs: (ton of them)
         \n- Important: No commands playback on devices with Android <=6.0

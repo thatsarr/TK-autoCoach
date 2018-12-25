@@ -291,7 +291,6 @@ public class MainActivity extends AppCompatActivity {
                 "Version: ".concat(getResources().getString(R.string.app_version)),
                 Toast.LENGTH_LONG
         ).show();
-        int i = 1/0;
     }
 
     public static Uri resourceToUri(Context context, int resID) {
